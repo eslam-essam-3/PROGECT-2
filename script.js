@@ -1,53 +1,40 @@
 function toggleInputs() {
     const type = document.getElementById('toolType').value;
     const inputsDiv = document.getElementById('inputs');
+    inputsDiv.innerHTML = "";
+
     if (type === 'resultant') {
-        inputsDiv.innerHTML = `
-            <input type="number" id="f1" placeholder="القوة الأولى">
-            <input type="number" id="f2" placeholder="القوة الثانية">
-            <input type="number" id="angle" placeholder="الزاوية">`;
+        inputsDiv.innerHTML = '<input type="number" id="f1" placeholder="F1"><input type="number" id="f2" placeholder="F2"><input type="number" id="angle" placeholder="الزاوية">';
+    } else if (type === 'components') {
+        inputsDiv.innerHTML = '<input type="number" id="f1" placeholder="F"><input type="number" id="angle" placeholder="الزاوية">';
     } else if (type === 'moment') {
-    inputsDiv.innerHTML = `
-        <input type="number" id="f1" placeholder="القوة (F)">
-        <input type="number" id="dist" placeholder="المسافة العمودية (d)">`;
+        inputsDiv.innerHTML = '<input type="number" id="f1" placeholder="F"><input type="number" id="dist" placeholder="المسافة">';
+    }
 }
-}
+
 function runCalculation() {
     const type = document.getElementById('toolType').value;
     const resDiv = document.getElementById('result');
+    const f1 = parseFloat(document.getElementById('f1').value);
     
-    let resultObj;
-
+    let result = 0;
     if (type === 'resultant') {
-        const F1 = parseFloat(document.getElementById('f1').value);
-        const F2 = parseFloat(document.getElementById('f2').value);
-        const angle = parseFloat(document.getElementById('angle').value);
-
-        if (!isValid(F1) || !isValid(F2)) {
-            resDiv.innerHTML = "<h3 style='color:red;'>خطأ: تأكد من إدخال قيم صحيحة!</h3>";
-            return;
-        }
-        // هنا بنستخدم الـ Class اللي أنت عملته
-        resultObj = EngineeringSolver.getResultant(F1, F2, angle);
-
-    } else if (type === 'stress') {
-        const F = parseFloat(document.getElementById('f1').value);
-        const A = parseFloat(document.getElementById('area').value);
-
-        if (!isValid(F) || !isValid(A)) {
-            resDiv.innerHTML = "<h3 style='color:red;'>خطأ: المساحة والقوة يجب أن تكون أكبر من صفر!</h3>";
-            return;
-        }
-        // هنا بنستخدم الـ Class اللي أنت عملته
-        resultObj = EngineeringSolver.getStress(F, A);
+        const f2 = parseFloat(document.getElementById('f2').value);
+        const ang = parseFloat(document.getElementById('angle').value) * (Math.PI / 180);
+        result = Math.sqrt(f1**2 + f2**2 + 2*f1*f2*Math.cos(ang)).toFixed(2);
+    } else if (type === 'components') {
+        const ang = parseFloat(document.getElementById('angle').value) * (Math.PI / 180);
+        result = "Fx: " + (f1 * Math.cos(ang)).toFixed(2) + ", Fy: " + (f1 * Math.sin(ang)).toFixed(2);
+    } else if (type === 'moment') {
+        const d = parseFloat(document.getElementById('dist').value);
+        result = (f1 * d).toFixed(2);
     }
-
-    // عرض النتيجة والخطوات
-    if (resultObj) {
-        resDiv.innerHTML = `<h3>النتيجة: ${resultObj.value}</h3><p>${resultObj.steps}</p>`;
-        saveResult(type, resultObj.value); // بنحفظ النتيجة في التاريخ
-    }
+    
+    resDiv.innerHTML = `<h3>النتيجة: ${result}</h3>`;
 }
+
+// تشغيل الأداة فوراً
+toggleInputs();
 // دالة الحفظ
 function saveResult(operation, result) {
     let history = JSON.parse(localStorage.getItem('engHistory')) || [];
@@ -85,4 +72,7 @@ class EngineeringSolver {
 }
 function isValid(value) {
     return value !== "" && value > 0; // بيتأكد إن القيمة مش فاضية وأكبر من صفر
+}
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js');
 }

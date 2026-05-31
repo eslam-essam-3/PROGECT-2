@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>حاسبة القوى الهندسية</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
 </head>
 <body>
     <div class="container">
@@ -14,16 +15,10 @@
         <option value="components">تحليل القوى (X, Y)</option>
         <option value="moment">حساب العزم (Moment)</option>
     </select>
-
-    <div id="inputs">
-        <input type="number" id="f1" placeholder="القوة (F)">
-        <input type="number" id="angle" placeholder="الزاوية (θ)">
-    </div>
-    
+    <div id="inputs"></div>
     <button onclick="runCalculation()">تنفيذ العملية</button>
     <div id="result"></div>
-    <div id="result"></div>
-<div id="historyBox" style="margin-top: 20px; font-size: 0.9em; color: #555;"></div>
+    <div id="historyBox" style="margin-top: 20px; font-size: 0.9em; color: #555;"></div>
 </div>
     <script src="script.js"></script>
 </body>
