@@ -11,52 +11,44 @@ function toggleInputs() {
         inputsDiv.innerHTML = '<input type="number" id="f1" placeholder="F"><input type="number" id="dist" placeholder="المسافة">';
     }
 }
-
 function runCalculation() {
     const type = document.getElementById('toolType').value;
     const resDiv = document.getElementById('result');
-    let f1 = parseFloat(document.getElementById('f1').value);
-    // بعد ما تحسب النتيجة (مثلاً متغير result)، ضيف السطر ده:
-    saveResult(type, result);
     let result = 0;
+
+    // الحسابات حسب النوع
     if (type === 'resultant') {
-        let f2 = parseFloat(document.getElementById('f2').value);
-        let ang = parseFloat(document.getElementById('angle').value) * (Math.PI / 180);
+        const f1 = parseFloat(document.getElementById('f1').value);
+        const f2 = parseFloat(document.getElementById('f2').value);
+        const ang = parseFloat(document.getElementById('angle').value) * (Math.PI / 180);
         result = Math.sqrt(f1**2 + f2**2 + 2*f1*f2*Math.cos(ang)).toFixed(2);
+        drawForce(f1, ang * (180/Math.PI)); // الرسم
     } else if (type === 'components') {
-        let ang = parseFloat(document.getElementById('angle').value) * (Math.PI / 180);
-        result = "Fx: " + (f1 * Math.cos(ang)).toFixed(2) + ", Fy: " + (f1 * Math.sin(ang)).toFixed(2);
+        const f1 = parseFloat(document.getElementById('f1').value);
+        const ang = parseFloat(document.getElementById('angle').value) * (Math.PI / 180);
+        result = `Fx: ${(f1 * Math.cos(ang)).toFixed(2)}, Fy: ${(f1 * Math.sin(ang)).toFixed(2)}`;
     } else if (type === 'moment') {
-        let d = parseFloat(document.getElementById('dist').value);
+        const f1 = parseFloat(document.getElementById('f1').value);
+        const d = parseFloat(document.getElementById('dist').value);
         result = (f1 * d).toFixed(2);
     }
-    // مثال لتطوير عرض النتائج
-resDiv.innerHTML = `
-    <div class="report">
-        <h3>تقرير التحليل الهندسي</h3>
-        <p><strong>العملية:</strong> ${type}</p>
-        <p><strong>المدخلات:</strong> القوة = ${f1} N</p>
-        <div class="result-box">النتيجة النهائية: ${result}</div>
-        <button onclick="window.print()">تحميل التقرير كـ PDF</button>
-    </div>
-`;
-}
-drawForce(f1, angle); // هي دي اللي هتشغل الرسم أوتوماتيك
-// تشغيل الأداة فوراً
-toggleInputs();
-// دالة الحفظ
-function saveResult(operation, result) {
-    let history = JSON.parse(localStorage.getItem('engHistory')) || [];
-    history.unshift({ op: operation, res: result, date: new Date().toLocaleTimeString() });
-    localStorage.setItem('engHistory', JSON.stringify(history.slice(0, 5)));
     
-    // السطر ده هو اللي بينقصك عشان التاريخ يظهر
-    displayHistory(); 
+    resDiv.innerHTML = `<h3>النتيجة: ${result}</h3>`;
+    
+    // حفظ وعرض التاريخ
+    saveResult(type, result);
 }
-// دالة عرض التاريخ
+
+function saveResult(op, res) {
+    let history = JSON.parse(localStorage.getItem('engHistory')) || [];
+    history.unshift({ op, res, date: new Date().toLocaleTimeString() });
+    localStorage.setItem('engHistory', JSON.stringify(history.slice(0, 5)));
+    displayHistory(); // لازم تنادي دي عشان يظهر في الصفحة
+}
+
 function displayHistory() {
     let history = JSON.parse(localStorage.getItem('engHistory')) || [];
-    let html = "<h4>آخر المسائل:</h4>";
+    let html = "<h4>آخر العمليات:</h4>";
     history.forEach(item => {
         html += `<p>${item.op}: ${item.res} <small>(${item.date})</small></p>`;
     });
