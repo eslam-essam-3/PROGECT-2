@@ -15,18 +15,18 @@ function toggleInputs() {
 function runCalculation() {
     const type = document.getElementById('toolType').value;
     const resDiv = document.getElementById('result');
-    const f1 = parseFloat(document.getElementById('f1').value);
+    let f1 = parseFloat(document.getElementById('f1').value);
     
     let result = 0;
     if (type === 'resultant') {
-        const f2 = parseFloat(document.getElementById('f2').value);
-        const ang = parseFloat(document.getElementById('angle').value) * (Math.PI / 180);
+        let f2 = parseFloat(document.getElementById('f2').value);
+        let ang = parseFloat(document.getElementById('angle').value) * (Math.PI / 180);
         result = Math.sqrt(f1**2 + f2**2 + 2*f1*f2*Math.cos(ang)).toFixed(2);
     } else if (type === 'components') {
-        const ang = parseFloat(document.getElementById('angle').value) * (Math.PI / 180);
+        let ang = parseFloat(document.getElementById('angle').value) * (Math.PI / 180);
         result = "Fx: " + (f1 * Math.cos(ang)).toFixed(2) + ", Fy: " + (f1 * Math.sin(ang)).toFixed(2);
     } else if (type === 'moment') {
-        const d = parseFloat(document.getElementById('dist').value);
+        let d = parseFloat(document.getElementById('dist').value);
         result = (f1 * d).toFixed(2);
     }
     // مثال لتطوير عرض النتائج
