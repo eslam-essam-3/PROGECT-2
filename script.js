@@ -16,7 +16,8 @@ function runCalculation() {
     const type = document.getElementById('toolType').value;
     const resDiv = document.getElementById('result');
     let f1 = parseFloat(document.getElementById('f1').value);
-    
+    // بعد ما تحسب النتيجة (مثلاً متغير result)، ضيف السطر ده:
+    saveResult(type, result);
     let result = 0;
     if (type === 'resultant') {
         let f2 = parseFloat(document.getElementById('f2').value);
@@ -47,10 +48,11 @@ toggleInputs();
 function saveResult(operation, result) {
     let history = JSON.parse(localStorage.getItem('engHistory')) || [];
     history.unshift({ op: operation, res: result, date: new Date().toLocaleTimeString() });
-    localStorage.setItem('engHistory', JSON.stringify(history.slice(0, 5))); // بنحفظ آخر 5 مسائل
-    displayHistory();
+    localStorage.setItem('engHistory', JSON.stringify(history.slice(0, 5)));
+    
+    // السطر ده هو اللي بينقصك عشان التاريخ يظهر
+    displayHistory(); 
 }
-
 // دالة عرض التاريخ
 function displayHistory() {
     let history = JSON.parse(localStorage.getItem('engHistory')) || [];
@@ -115,4 +117,5 @@ function drawForce(F, angle) {
 // تشغيل الدالة فوراً عشان تملأ الخانات أول ما الصفحة تفتح
 window.onload = function() {
     toggleInputs();
+    displayHistory(); // ضيف دي كمان
 };
