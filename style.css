@@ -1,5 +1,15 @@
 body { font-family: sans-serif; text-align: center; background-color: #f4f4f4; padding: 20px; }
-.container { background: white; padding: 20px; border-radius: 10px; max-width: 400px; margin: auto; }
+.container { 
+    background: white; 
+    padding: 20px; 
+    border-radius: 10px; 
+    /* ده اللي بيخلي الموقع ملموم */
+    max-width: 400px; 
+    /* ده عشان يفضل في نص الشاشة دايماً */
+    margin: 20px auto; 
+    /* ده بيضمن إنه ما يزيدش عن عرض الموبايل */
+    width: 90%; 
+}
 input { display: block; width: 90%; margin: 10px auto; padding: 10px; }
 button { background: #007bff; color: white; border: none; padding: 10px 20px; cursor: pointer; }
 select { padding: 10px; width: 95%; margin-bottom: 20px; border-radius: 5px; }
