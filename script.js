@@ -112,3 +112,7 @@ function drawForce(F, angle) {
         }
     });
 }
+// تشغيل الدالة فوراً عشان تملأ الخانات أول ما الصفحة تفتح
+window.onload = function() {
+    toggleInputs();
+};
