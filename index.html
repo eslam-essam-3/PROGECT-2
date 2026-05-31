@@ -5,6 +5,7 @@
     <title>حاسبة القوى الهندسية</title>
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="container">
@@ -17,6 +18,7 @@
     </select>
     <div id="inputs"></div>
     <button onclick="runCalculation()">تنفيذ العملية</button>
+    <canvas id="myChart" style="max-width: 400px; max-height: 400px; margin: 20px auto;"></canvas>
     <div id="result"></div>
     <div id="historyBox" style="margin-top: 20px; font-size: 0.9em; color: #555;"></div>
 </div>

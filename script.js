@@ -29,10 +29,18 @@ function runCalculation() {
         const d = parseFloat(document.getElementById('dist').value);
         result = (f1 * d).toFixed(2);
     }
-    
-    resDiv.innerHTML = `<h3>النتيجة: ${result}</h3>`;
+    // مثال لتطوير عرض النتائج
+resDiv.innerHTML = `
+    <div class="report">
+        <h3>تقرير التحليل الهندسي</h3>
+        <p><strong>العملية:</strong> ${type}</p>
+        <p><strong>المدخلات:</strong> القوة = ${f1} N</p>
+        <div class="result-box">النتيجة النهائية: ${result}</div>
+        <button onclick="window.print()">تحميل التقرير كـ PDF</button>
+    </div>
+`;
 }
-
+drawForce(f1, angle); // هي دي اللي هتشغل الرسم أوتوماتيك
 // تشغيل الأداة فوراً
 toggleInputs();
 // دالة الحفظ
@@ -75,4 +83,32 @@ function isValid(value) {
 }
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js');
+}
+// ضيف دي في ملف الـ HTML بتاعك: <canvas id="myChart"></canvas>
+let myChart; // متغير عام عشان نمسح الرسمة القديمة قبل ما نرسم الجديدة
+
+function drawForce(F, angle) {
+    const ctx = document.getElementById('myChart').getContext('2d');
+    
+    // لو فيه رسمة قديمة، امسحها
+    if (myChart) myChart.destroy();
+
+    myChart = new Chart(ctx, {
+        type: 'scatter',
+        data: {
+            datasets: [{
+                label: 'اتجاه القوة',
+                data: [{x: 0, y: 0}, {x: F * Math.cos(angle * Math.PI/180), y: F * Math.sin(angle * Math.PI/180)}],
+                borderColor: 'red',
+                borderWidth: 3,
+                showLine: true
+            }]
+        },
+        options: {
+            scales: {
+                x: { min: -F, max: F },
+                y: { min: -F, max: F }
+            }
+        }
+    });
 }
