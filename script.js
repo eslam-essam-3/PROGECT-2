@@ -8,7 +8,14 @@ function toggleInputs() {
     } else if (type === 'components') {
         inputsDiv.innerHTML = '<input type="number" id="f1" placeholder="F"><input type="number" id="angle" placeholder="الزاوية">';
     } else if (type === 'moment') {
-        inputsDiv.innerHTML = '<input type="number" id="f1" placeholder="F"><input type="number" id="dist" placeholder="المسافة">';
+        const count = prompt("كم عدد القوى التي تريد حساب عزمها؟", "2");
+        for(let i = 0; i < count; i++) {
+            inputsDiv.innerHTML += `
+                <div>
+                    <input type="number" id="f${i}" placeholder="قوة ${i+1}">
+                    <input type="number" id="d${i}" placeholder="بعد قوة ${i+1}">
+                </div>`;
+        }
     }
 }
 function runCalculation() {
@@ -28,9 +35,14 @@ function runCalculation() {
         const ang = parseFloat(document.getElementById('angle').value) * (Math.PI / 180);
         result = `Fx: ${(f1 * Math.cos(ang)).toFixed(2)}, Fy: ${(f1 * Math.sin(ang)).toFixed(2)}`;
     } else if (type === 'moment') {
-        const f1 = parseFloat(document.getElementById('f1').value);
-        const d = parseFloat(document.getElementById('dist').value);
-        result = (f1 * d).toFixed(2);
+        const inputs = document.querySelectorAll('#inputs input');
+        // هنا بنلف على الخانات اللي ولدناها ونجمع العزم
+        for(let i = 0; i < inputs.length; i += 2) {
+            let f = parseFloat(inputs[i].value) || 0;
+            let d = parseFloat(inputs[i+1].value) || 0;
+            totalMoment += (f * d);
+        }
+        document.getElementById('result').innerHTML = `<h3>المجموع الكلي للعزم = ${totalMoment.toFixed(2)}</h3>`;
     }
     
     resDiv.innerHTML = `<h3>النتيجة: ${result}</h3>`;
